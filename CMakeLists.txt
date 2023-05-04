@@ -6,11 +6,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-
+set(THIRD_PARTY_LIB_FOLDER "/mnt/working/third_party_libs")
 
 set(third_party_find_package_list
   ament_cmake
-  phoenix-pro
   Threads
 )
 
@@ -21,7 +20,6 @@ set(ros_find_package_list
 )
 
 set(link_libraries
-  phoenix-pro
   Threads::Threads
 )
 
@@ -48,19 +46,9 @@ add_custom_command(
 )
 
 
-# syntax to trick cmake into always running generation
-# add_custom_target(
-#         always_run_target ALL
-#         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__header.h
-# )
-
-# add_custom_command(
-#   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp ${CMAKE_CURRENT_BINARY_DIR}/__header.h
-#   COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/template/render_jinja.py --output ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp --template ${CMAKE_CURRENT_SOURCE_DIR}/template/${PROJECT_NAME}.hpp.j2
-#   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template/render_jinja.py ${CMAKE_CURRENT_SOURCE_DIR}/template/${PROJECT_NAME}.hpp.j2
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#   COMMENT "Generating header ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp"
-# )
+include_directories(
+ ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out
+)
 
 
 file(GLOB_RECURSE executable_sources CONFIGURE_DEPENDS
@@ -94,6 +82,17 @@ foreach(rtdependency ${ros_find_package_list})
 endforeach()
 
 target_link_libraries(${PROJECT_NAME} ${link_libraries})
+
+if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "amd64")
+  target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/x86_64/RobotComms.a)
+endif()
+
+if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
+  target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/aarch64/RobotComms.a)
+endif()
+
+target_link_libraries(${PROJECT_NAME} ${PROTOBUF_LIBRARY})
+
 
 target_compile_features(${PROJECT_NAME} PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
