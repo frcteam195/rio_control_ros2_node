@@ -21,6 +21,7 @@ set(ros_find_package_list
 
 set(link_libraries
   Threads::Threads
+  libzmq-static
 )
 
 add_custom_target(make_gen_inc_folder ALL
@@ -40,7 +41,7 @@ add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/parameters.hpp ${CMAKE_CURRENT_SOURCE_DIR}/generated/src/parameters.cpp
   COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/template/render_jinja.py --header_output ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/parameters.hpp --header_template ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.hpp.j2
   --src_output ${CMAKE_CURRENT_SOURCE_DIR}/generated/src/parameters.cpp --src_template ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.cpp.j2
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template/render_jinja.py ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.hpp.j2 ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.cpp.j2
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../../config/${PROJECT_NAME}.yaml ${CMAKE_CURRENT_SOURCE_DIR}/template/render_jinja.py ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.hpp.j2 ${CMAKE_CURRENT_SOURCE_DIR}/template/parameters.cpp.j2
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "Generating header ${CMAKE_CURRENT_SOURCE_DIR}/generated/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp"
 )
@@ -62,6 +63,13 @@ file(GLOB_RECURSE generated_sources CONFIGURE_DEPENDS
 foreach(tdependency ${third_party_find_package_list})
   find_package(${tdependency} REQUIRED)
 endforeach()
+
+include(FindProtobuf)
+find_package(Protobuf 3.21.12.0 EXACT REQUIRED PATHS /usr/local/lib)
+include_directories(${PROTOBUF_INCLUDE_DIR})
+
+find_package(ZeroMQ 4.3.4 EXACT REQUIRED PATHS /usr/local/lib)
+include_directories(${ZeroMQ_INCLUDE_DIR})
 
 foreach(rdependency ${ros_find_package_list})
   find_package(${rdependency} REQUIRED)
