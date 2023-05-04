@@ -1,0 +1,20 @@
+#pragma once
+#include "rclcpp/rclcpp.hpp"
+#include <string>
+#include <map>
+
+typedef struct parameters
+{
+    {% for param_name,type in params.items() -%}
+    rclcpp::Parameter {{param_name}};
+    {% endfor -%}
+} parameters_t;
+extern parameters_t Parameters;
+void load_parameters(rclcpp::Node* node);
+
+class ParameterizedNode : public rclcpp::Node
+{
+public:
+    ParameterizedNode(std::string node_name);
+};
+
