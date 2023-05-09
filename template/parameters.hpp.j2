@@ -5,9 +5,9 @@
 
 typedef struct parameters
 {
-    {% for param_name,type in params.items() -%}
+{% for param_name,type in params.items() %}
     rclcpp::Parameter {{param_name}};
-    {% endfor -%}
+{% endfor %}
 } parameters_t;
 extern parameters_t Parameters;
 void load_parameters(rclcpp::Node* node);

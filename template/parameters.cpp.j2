@@ -4,13 +4,13 @@ parameters_t Parameters;
 
 void load_parameters(rclcpp::Node* node)
 {
-    {% for param_name,type in params.items() -%}
+{% for param_name,type in params.items() %}
     node->declare_parameter("{{param_name}}", {{type}});
-    {% endfor -%}
+{% endfor %}
 
-    {% for param_name,type in params.items() -%}
+{% for param_name,type in params.items() %}
     Parameters.{{param_name}} = node->get_parameter("{{param_name}}");
-    {% endfor -%}
+{% endfor %}
 }
 
 ParameterizedNode::ParameterizedNode(std::string node_name) : rclcpp::Node(node_name)
