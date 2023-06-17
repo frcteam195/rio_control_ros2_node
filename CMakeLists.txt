@@ -91,13 +91,7 @@ endforeach()
 
 target_link_libraries(${PROJECT_NAME} ${link_libraries})
 
-if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "amd64")
-  target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/x86_64/RobotComms.a)
-endif()
-
-if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
-  target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/aarch64/RobotComms.a)
-endif()
+target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/RobotComms.a)
 
 target_link_libraries(${PROJECT_NAME} ${PROTOBUF_LIBRARY})
 
