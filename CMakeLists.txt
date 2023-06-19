@@ -6,6 +6,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(boost_libraries_list
+)
+
 set(THIRD_PARTY_LIB_FOLDER "/mnt/working/third_party_libs")
 
 set(third_party_find_package_list
@@ -75,6 +78,8 @@ foreach(rdependency ${ros_find_package_list})
   find_package(${rdependency} REQUIRED)
 endforeach()
 
+find_package(Boost REQUIRED COMPONENTS ${boost_libraries_list}) 
+
 add_executable(${PROJECT_NAME} ${executable_sources} ${generated_sources})
 add_dependencies(generate_jinja_sources make_gen_inc_folder make_gen_src_folder)
 add_dependencies(${PROJECT_NAME} generate_jinja_sources)
@@ -83,13 +88,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generated/include>
   $<INSTALL_INTERFACE:include>
+  $<BUILD_INTERFACE:${Boost_INCLUDE_DIRS}>
 )
 
 foreach(rtdependency ${ros_find_package_list})
   ament_target_dependencies(${PROJECT_NAME} ${rtdependency})
 endforeach()
 
-target_link_libraries(${PROJECT_NAME} ${link_libraries})
+target_link_libraries(${PROJECT_NAME} ${link_libraries} ${Boost_LIBRARIES})
 
 target_link_libraries(${PROJECT_NAME} ${THIRD_PARTY_LIB_FOLDER}/ROS2_ProtoDef/out/RobotComms.a)
 
