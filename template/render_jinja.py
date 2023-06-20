@@ -42,37 +42,58 @@ type_map = {
     9 : "rclcpp::PARAMETER_STRING_ARRAY",
 }
 
+lang_type_map = {
+    None : "rclcpp::Parameter",
+    bool : "bool",
+    int : "int",
+    float : "double",
+    str : "std::string",
+    bytes : "std::vector<char>",
+    6 : "std::vector<bool>",
+    7 : "std::vector<int>",
+    8 : "std::vector<double>",
+    9 : "std::vector<std::string>",
+}
+
 params = {}
+lang_types = {}
 
 for (k, v) in yaml_obj[node_name]["ros__parameters"].items():
     if type(v) is list:
         if all(isinstance(n, bool) for n in v):
             params[k] = type_map[6]
+            lang_types[k] = lang_type_map[6]
         elif all(isinstance(n, int) for n in v):
             params[k] = type_map[7]
+            lang_types[k] = lang_type_map[7]
         elif all(isinstance(n, float) for n in v):
             params[k] = type_map[8]
+            lang_types[k] = lang_type_map[8]
         elif any(isinstance(n, float) for n in v):
             params[k] = type_map[8]
+            lang_types[k] = lang_type_map[8]
         elif all(isinstance(n, str) for n in v):
             params[k] = type_map[9]
+            lang_types[k] = lang_type_map[9]
         else:
             params[k] = type_map[None]
+            lang_types[k] = lang_type_map[None]
         pass
     else:
         params[k] = type_map[type(v)]
+        lang_types[k] = lang_type_map[type(v)]
 
 
 # # Generate unit test template
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('/'), trim_blocks=True)
 header_template = env.get_template(args.header_template)
-header_result = header_template.render(params=params, node_name=node_name)
+header_result = header_template.render(params=params, node_name=node_name, lang_types=lang_types)
 f = open(args.header_file, "w")
 f.write(header_result)
 f.close()
 
 src_template = env.get_template(args.src_template)
-src_result = src_template.render(params=params, node_name=node_name)
+src_result = src_template.render(params=params, node_name=node_name, lang_types=lang_types)
 f = open(args.src_file, "w")
 f.write(src_result)
 f.close()

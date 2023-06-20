@@ -96,7 +96,7 @@ private:
 
             SolenoidTracker updated_tracked_solenoid;
             updated_tracked_solenoid.solenoid = updated_solenoid;
-            updated_tracked_solenoid.active_time = this->get_clock()->now() + rclcpp::Duration::from_seconds(Parameters.roborio_control_timeout.as_double());
+            updated_tracked_solenoid.active_time = this->get_clock()->now() + rclcpp::Duration::from_seconds(Parameters.roborio_control_timeout);
 
             solenoid_control_map[msg.solenoids[i].id] = updated_tracked_solenoid;
         }
@@ -221,7 +221,7 @@ private:
     {
         void *publisher = zmq_socket(context, ZMQ_RADIO);
 
-        if (zmq_connect(publisher, Parameters.roborio_ip_address.as_string().c_str()) < 0)
+        if (zmq_connect(publisher, Parameters.roborio_ip_address.c_str()) < 0)
         {
             std::string error_msg = "Failed to initialize solenoid publisher";
             RCLCPP_ERROR(this->get_logger(), error_msg.c_str());
@@ -240,7 +240,7 @@ private:
                 static ck::SolenoidControl solenoid_control;
                 solenoid_control.clear_solenoids();
                 solenoid_control.Clear();
-                solenoid_control.set_compressor_is_enabled_for_auto(Parameters.compressor_enabled_in_auto.as_bool());
+                solenoid_control.set_compressor_is_enabled_for_auto(Parameters.compressor_enabled_in_auto);
 
                 std::vector<std::map<int32_t, SolenoidTracker>::iterator> timed_out_solenoid_list;
 

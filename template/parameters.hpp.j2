@@ -5,8 +5,8 @@
 
 typedef struct parameters
 {
-{% for param_name,type in params.items() %}
-    rclcpp::Parameter {{param_name}};
+{% for param_name,type in lang_types.items() %}
+    {{type}} {{param_name}};
 {% endfor %}
 } parameters_t;
 extern parameters_t Parameters;
@@ -17,4 +17,3 @@ class ParameterizedNode : public rclcpp::Node
 public:
     ParameterizedNode(std::string node_name);
 };
-

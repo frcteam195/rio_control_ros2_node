@@ -8,8 +8,8 @@ void load_parameters(rclcpp::Node* node)
     node->declare_parameter("{{param_name}}", {{type}});
 {% endfor %}
 
-{% for param_name,type in params.items() %}
-    Parameters.{{param_name}} = node->get_parameter("{{param_name}}");
+{% for param_name,type in lang_types.items() %}
+    Parameters.{{param_name}} = node->get_parameter("{{param_name}}").get_value<{{type}}>();
 {% endfor %}
 }
 
