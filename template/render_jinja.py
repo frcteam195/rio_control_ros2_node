@@ -50,7 +50,7 @@ lang_type_map = {
     str : "std::string",
     bytes : "std::vector<char>",
     6 : "std::vector<bool>",
-    7 : "std::vector<int>",
+    7 : "std::vector<long int>",
     8 : "std::vector<double>",
     9 : "std::vector<std::string>",
 }
