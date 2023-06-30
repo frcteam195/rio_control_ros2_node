@@ -7,6 +7,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(boost_libraries_list
+  date_time
+  filesystem
 )
 
 set(THIRD_PARTY_LIB_FOLDER "/mnt/working/third_party_libs")
@@ -19,7 +21,14 @@ set(third_party_find_package_list
 set(ros_find_package_list
   rclcpp
   std_msgs
+  geometry_msgs
+  nav_msgs
   ck_ros2_base_msgs_node
+  ck_utilities_ros2_node
+  tf2
+  tf2_eigen
+  tf2_ros
+  tf2_geometry_msgs
 )
 
 set(link_libraries

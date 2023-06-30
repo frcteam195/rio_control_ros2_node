@@ -33,8 +33,10 @@
 #include <ck_ros2_base_msgs_node/msg/solenoid_control.hpp>
 #include <ck_ros2_base_msgs_node/msg/solenoid_control_array.hpp>
 
+#include "ck_utilities_ros2_node/node_handle.hpp"
 
 #define NODE_NAME "rio_control_ros2_node"
+rclcpp::Node::SharedPtr node_handle;
 
 const std::vector<std::string> ZMQ_TOPICS = {"robotstatus", "joystickstatus"};
 
@@ -295,8 +297,8 @@ private:
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<LocalNode>();
-    rclcpp::spin(node);
+    node_handle = std::make_shared<LocalNode>();
+    rclcpp::spin(node_handle);
     rclcpp::shutdown();
     return 0;
 }
