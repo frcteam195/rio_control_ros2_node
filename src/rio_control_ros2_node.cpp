@@ -223,7 +223,7 @@ private:
     {
         void *publisher = zmq_socket(context, ZMQ_RADIO);
 
-        if (zmq_connect(publisher, Parameters.roborio_ip_address.c_str()) < 0)
+        if (zmq_connect(publisher, Parameters.roborio_connection_string.c_str()) < 0)
         {
             std::string error_msg = "Failed to initialize solenoid publisher";
             RCLCPP_ERROR(this->get_logger(), error_msg.c_str());
