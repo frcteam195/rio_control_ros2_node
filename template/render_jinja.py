@@ -3,6 +3,7 @@ import yaml
 import pathlib
 import argparse
 from typing import List
+import xml.etree.ElementTree as ET
 parser = argparse.ArgumentParser(description='Render script')
 parser.add_argument('--header_output', action="store", dest='header_file', default="")
 parser.add_argument('--header_template', action="store", dest='header_template', default="")
@@ -10,7 +11,8 @@ parser.add_argument('--src_output', action="store", dest='src_file', default="")
 parser.add_argument('--src_template', action="store", dest='src_template', default="")
 args = parser.parse_args()
 
-node_name = pathlib.Path(__file__).parent.parent.name
+tree = ET.parse(str(pathlib.Path(__file__).resolve().parent.parent / "package.xml"))
+node_name = tree.getroot().find('name').text
 robot_name = ""
 
 for item in pathlib.Path.cwd().parent.iterdir():
