@@ -36,7 +36,6 @@
 #include "ck_utilities_ros2_node/node_handle.hpp"
 
 #define NODE_NAME "rio_control_ros2_node"
-rclcpp::Node::SharedPtr node_handle;
 
 const std::vector<std::string> ZMQ_TOPICS = {"robotstatus", "joystickstatus"};
 

@@ -1,6 +1,7 @@
 #include "{{node_name}}/parameters.hpp"
 
 parameters_t Parameters;
+rclcpp::Node::SharedPtr node_handle;
 
 void load_parameters(rclcpp::Node* node)
 {
@@ -15,5 +16,6 @@ void load_parameters(rclcpp::Node* node)
 
 ParameterizedNode::ParameterizedNode(std::string node_name) : rclcpp::Node(node_name)
 {
+    node_handle = std::shared_ptr<ParameterizedNode>(this);
     load_parameters(this);
 }
