@@ -296,8 +296,8 @@ private:
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    node_handle = std::make_shared<LocalNode>();
-    rclcpp::spin(node_handle);
+    auto node = std::make_shared<LocalNode>();
+    rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }
